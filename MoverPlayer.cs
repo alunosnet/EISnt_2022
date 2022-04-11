@@ -10,6 +10,7 @@ public class MoverPlayer : MonoBehaviour
     CharacterController _characterController;
     Animator _animator;
     Vector3 velocidade;
+    [SerializeField] bool IsGrounded;   //04/04/2022 - Adicionado para verificar se o personagem está no chão
     // Start is called before the first frame update
     void Start()
     {
@@ -42,12 +43,13 @@ public class MoverPlayer : MonoBehaviour
             _animator.SetFloat("velocidade", andar);
 
         //gravidade
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && IsGrounded)  // 04/04/2022 - Alterado para só saltar quando está em contacto com o chão
         {
             velocidade.y = Mathf.Sqrt(VelocidadeSalto * Physics.gravity.y);
             _animator?.SetTrigger("saltar");
         }
         velocidade += Physics.gravity * Time.deltaTime;
         _characterController.Move(velocidade*Time.deltaTime);
+        IsGrounded = _characterController.isGrounded;   // 04/04/2022 - Adicionado para verificar se o personagem está no chão
     }
 }
